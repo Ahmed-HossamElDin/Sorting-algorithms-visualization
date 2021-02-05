@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MergeSorting</title>
+    <style> body {padding: 0; margin: 0;} </style>
+    <script src="../p5.min.js"></script>
+    <script src="../addons/p5.dom.min.js"></script>
+    <script src="../addons/p5.sound.min.js"></script>
+    <script type="text/javascript">
+    var numbers = [];
+    let i = 0;
+    let isPivot = [];
+    function setup() {
+	  //random elements
+	  numbers = new Array(windowWidth);
+	  isPivot = new Array(windowWidth);
+	  for (let i = 0; i < numbers.length; i++) {
+	    numbers[i] = random(windowHeight);
+	    isPivot[i] = 0;
+	  }
+	  mergeSort(numbers , 0 , numbers.length);
+	  frameRate(1);
+	  createCanvas(windowWidth, windowHeight-5);
+	}
+
+    //Merge sort	
+    
+	function draw() {
+	  var sizeOfLine = (windowWidth)/numbers.length; 
+	  background(0);
+	  stroke(220,200 ,50);
+	  strokeWeight(sizeOfLine);
+	  var i = 0;
+	  var j = 1;
+
+	  for(var x = 0 ; x < numbers.length ; x++)
+	  { 
+	  	if(isPivot[x] == 1)
+	  	{
+	  		stroke(6 , 7 ,250);
+	  	}
+	  	else
+	  	{
+	  	 if( (0 <= numbers[x]) && (numbers[x] <= (windowHeight * 0.33)) )
+	  	 {
+	  	 	stroke(6 , 229, 50);
+	  	 }
+	  	 else if ((numbers[x] >= (windowHeight * 0.33)) && (numbers[x] <= (windowHeight * 0.66)))
+	  	 {
+	  	 	stroke(210 ,208 ,50);
+	  	 }
+	  	 else
+	  	 {
+	  	 	stroke(191 ,1 ,50);
+	  	 }
+	  	}
+	  	 
+
+	  	line((x * sizeOfLine) ,height ,(x * sizeOfLine) ,height - numbers[x]);
+	  }
+	}
+
+	async function swap(array , i ,j)
+	{
+		await sleep(1); //wth?????????
+		var temp = array[i];
+		array[i] = array[j];
+		array[j] = temp;
+	}
+
+	async function mergeSort(arr , start , end)
+	{
+		if(isSorted(arr))
+		{
+			return;
+		}
+		// if(start == -1 || end == -1)
+		// {
+		// 	return;
+		// }
+		let mid = await partition(arr ,start , end);
+		if(mid == -1)
+		{
+			return;
+		}
+		console.log(mid);
+		// if(start  == (end - 1))
+		// 		{
+		// 			console.log("true");
+		// 			if( arr[start] > arr[end] )
+		// 			{
+		// 			console.log("swapped");
+		// 			isPivot[mid] = 0;
+		// 			await swap(arr , start , end);
+		// 		}
+		isPivot[mid] = 0; //remove cursor
+		await Promise.all([mergeSort(arr , start , mid - 1),mergeSort(arr , mid + 1 , end)])
+	}
+
+	async function partition(arr , start , end)
+	{
+		let mid = floor((start + end)/2);
+		isPivot[mid] = 1;
+		if(start > end || start == end)
+		{
+			return -1; 
+		  //}
+			// if(start  == (end - 1))
+			// 	{
+			// 		console.log("true");
+			// 		if( arr[start] > arr[end] )
+			// 		{
+			// 		console.log("swapped");
+			// 		isPivot[mid] = 0;
+			// 		await swap(arr , start , end);
+			// 		}
+		  //}
+		return mid;
+	}
+
+	function sleep(ms) {
+  	return new Promise(resolve => setTimeout(resolve, ms));
+	}
+
+function isSorted(arr)
+	{
+		 	let SortedFlag = 1;
+			for (var i = 0; i < arr.length - 1; i++) {
+			if (arr[i] > arr[i+1]) {
+					SortedFlag = 0;
+					break;
+			}
+		 }
+	 return SortedFlag;
+	}
+
+    </script>
+  </head>
+  <body>
+
+  </body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SelectionSorting</title>
+    <style> body {padding: 0; margin: 0;} </style>
+    <script src="../p5.min.js"></script>
+    <script src="../addons/p5.dom.min.js"></script>
+    <script src="../addons/p5.sound.min.js"></script>
+    <script type="text/javascript">
+    var numbers = [];
+    let i = 0;
+    let j = 0;
+    function setup() {
+	  //random elements
+	  numbers = new Array(windowWidth);
+	  for (let i = 0; i < numbers.length; i++) {
+	    numbers[i] = random(windowHeight);
+	  }
+	  frameRate(60);
+	  createCanvas(windowWidth, windowHeight-5);
+	}
+
+    //Bubble sort	
+    
+	function draw() {
+	  var sizeOfLine = (windowWidth)/numbers.length; 
+	  background(0);
+	  stroke(255);
+	  strokeWeight(sizeOfLine);
+	  	if(i < numbers.length - 1)
+		{
+			var minimum = numbers[i];
+			var minimumLocation = i;
+			for(j = i+1 ; j < numbers.length -1 ; j++)
+			{
+				if(numbers[j] < minimum)
+	      		{
+	      			minimum = numbers[j];
+	      			minimumLocation = j;
+	      		}
+			}
+			if(minimum < numbers[i])
+			{
+				swap(numbers , i , minimumLocation );
+			}
+			i++; 
+		}
+		else
+		{
+			console.log("finished");
+			noLoop();
+		}
+	  for(var x = 0 ; x < numbers.length ; x++)
+	  { 
+	  		//** recolor based on percentage of maximum value
+	  	 if( (0 <= numbers[x]) && (numbers[x] <= (windowHeight * 0.33)) )
+	  	 {
+	  	 	stroke(6 , 229, 50);
+	  	 }
+	  	 else if ((numbers[x] >= (windowHeight * 0.33)) && (numbers[x] <= (windowHeight * 0.66)))
+	  	 {
+	  	 	stroke(210 ,208 ,50);
+	  	 }
+	  	 else
+	  	 {
+	  	 	stroke(191 ,1 ,50);
+	  	 }
+	  	line((x * sizeOfLine) ,height ,(x * sizeOfLine) ,height - numbers[x]);
+	  }
+	}
+
+	function swap(array , i ,j)
+	{
+		var temp = array[i];
+		array[i] = array[j];
+		array[j] = temp;
+	}
+    </script>
+  </head>
+  <body>
+
+  </body>
+</html>

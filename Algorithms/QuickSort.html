@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickSorting</title>
+    <style> body {padding: 0; margin: 0;} </style>
+    <script src="../p5.min.js"></script>
+    <script src="../addons/p5.dom.min.js"></script>
+    <script src="../addons/p5.sound.min.js"></script>
+    <script type="text/javascript">
+    var numbers = [];
+    let i = 0;
+    let isPivot = [];
+    function setup() {
+	  //random elements
+	  numbers = new Array(windowWidth);
+	  isPivot = new Array(windowWidth);
+	  for (let i = 0; i < numbers.length; i++) {
+	    numbers[i] = random(windowHeight);
+	    isPivot[i] = 0;
+	  }
+	  quickSort(numbers , 0 , numbers.length);
+	  frameRate(60);
+	  createCanvas(windowWidth, windowHeight-5);
+	}
+
+    //Bubble sort	
+    
+	function draw() {
+	  var sizeOfLine = (windowWidth)/numbers.length; 
+	  background(0);
+	  stroke(220,200 ,50);
+	  strokeWeight(sizeOfLine);
+	  var i = 0;
+	  var j = 1;
+
+	  for(var x = 0 ; x < numbers.length ; x++)
+	  { 
+	  	if(isPivot[x] == 1)
+	  	{
+	  		stroke(6 , 7 ,250);
+	  	}
+	  	else
+	  	{
+	  	 if( (0 <= numbers[x]) && (numbers[x] <= (windowHeight * 0.33)) )
+	  	 {
+	  	 	stroke(6 , 229, 50);
+	  	 }
+	  	 else if ((numbers[x] >= (windowHeight * 0.33)) && (numbers[x] <= (windowHeight * 0.66)))
+	  	 {
+	  	 	stroke(210 ,208 ,50);
+	  	 }
+	  	 else
+	  	 {
+	  	 	stroke(191 ,1 ,50);
+	  	 }
+	  	}
+	  	 
+
+	  	line((x * sizeOfLine) ,height ,(x * sizeOfLine) ,height - numbers[x]);
+	  }
+	}
+
+	async function swap(array , i ,j)
+	{
+		await sleep(1); //wth?????????
+		var temp = array[i];
+		array[i] = array[j];
+		array[j] = temp;
+	}
+
+	async function quickSort(arr , start , end)
+	{
+		if(start >= end)
+		{
+			return;
+		}
+		let index = await partition(arr ,start , end);
+		isPivot[index] = 0; //remove cursor
+		await Promise.all([quickSort(arr , start , index - 1),quickSort(arr , index + 1 , end)])
+		// await quickSort(arr , start , index - 1);
+		// await quickSort(arr , index + 1 , end);
+	}
+
+	async function partition(arr , start , end)
+	{
+		let pivotIndex = start;
+		let pivotValue = arr[end];
+		isPivot[pivotIndex] = 1;
+		for (let i = start ; i < end; i++)
+		{
+			if(arr[i] < pivotValue)
+				{
+					await swap(arr , i , pivotIndex);
+					isPivot[pivotIndex] = 0;
+					pivotIndex++;
+					isPivot[pivotIndex] = 1;
+					
+				}
+		}
+		await swap(arr , pivotIndex , end);
+		return pivotIndex;
+	}
+
+	function sleep(ms) {
+  	return new Promise(resolve => setTimeout(resolve, ms));
+	}
+
+    </script>
+  </head>
+  <body>
+
+  </body>
+</html>
